@@ -1,5 +1,6 @@
 export default class Tile {
     #id = 0;
+    #tileElement;
 
     /**
      * @type {Counter}
@@ -24,7 +25,9 @@ export default class Tile {
      * @param {Palette} palette
      */
     observe = (tile, palette) => {
-        tile.addEventListener('click', (e) => {
+        this.#tileElement = tile;
+
+        this.#tileElement.addEventListener('click', (e) => {
             let elem = e.target.getBoundingClientRect(),
                 x = elem.left + elem.width / 2,
                 y = elem.top + elem.height / 2;
@@ -34,21 +37,27 @@ export default class Tile {
             e.stopImmediatePropagation();
         });
 
-        document.addEventListener('color-chosen', (e) => {
-            if (e.detail.targetId === this.#id) {
-                let classList = tile.classList,
-                    currentColor = classList.item(classList.length - 1);
+        document.addEventListener('color-chosen', this.#setColor);
+    }
 
-                try {
-                    this.#counter.vacate(currentColor);
-                    this.#counter.occupy(e.detail.color);
+    stopListen = () => {
+        document.removeEventListener('color-chosen', this.#setColor)
+    }
 
-                    tile.classList.remove(currentColor);
-                    tile.classList.add(e.detail.color);
-                } catch (e) {
-                    console.error(e.message);
-                }
+    #setColor = (e) => {
+        if (e.detail.targetId === this.#id) {
+            let classList = this.#tileElement.classList,
+                currentColor = classList.item(classList.length - 1);
+
+            try {
+                this.#counter.vacate(currentColor);
+                this.#counter.occupy(e.detail.color);
+
+                this.#tileElement.classList.remove(currentColor);
+                this.#tileElement.classList.add(e.detail.color);
+            } catch (e) {
+                console.error(e.message);
             }
-        });
+        }
     }
 }

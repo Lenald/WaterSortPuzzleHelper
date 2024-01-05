@@ -8,8 +8,13 @@ class App {
     #palette = new Palette();
     #counter = new Counter(this.#palette);
 
+    /**
+     * @type {Bottle[]}
+     */
+    #bottles = [];
+
     constructor() {
-        this.createBottles(this.#DEFAULT_COUNT);
+        this.#createBottles(this.#DEFAULT_COUNT);
         this.#palette.observe();
     }
 
@@ -25,14 +30,14 @@ class App {
         });
     }
 
-    createBottles = (count) => {
+    #createBottles = (count) => {
         let area = document.getElementById('area');
 
         area.className = '';
         area.classList.add('w' + Math.ceil(count / 2));
 
         for (let i = 0; i < count - 2; i++) {
-            new Bottle(i, this.#palette, this.#counter);
+            this.#bottles.push(new Bottle(i, this.#palette, this.#counter));
         }
 
         for (let i = 0; i < 2; i++) {
@@ -46,7 +51,14 @@ class App {
         document.getElementById('area').innerHTML = '';
         this.#counter.reset();
         this.#palette.reset();
-        this.createBottles(count)
+
+        this.#bottles.forEach((bottle) => {
+            bottle.stopListen();
+        });
+
+        this.#bottles = [];
+
+        this.#createBottles(count);
     }
 
     #decreaseCount = () => {
