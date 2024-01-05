@@ -38,6 +38,14 @@ export default class Palette {
         });
     }
 
+    reset = () => {
+        document.querySelectorAll('#palette .tile.disabled').forEach((item) => {
+            item.classList.remove('disabled');
+        });
+
+        this.#hide();
+    }
+
     show = (x, y, targetTileId) => {
         this.#targetTileId = targetTileId;
 

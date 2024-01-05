@@ -45,6 +45,7 @@ class App {
     #reset = (count = this.#DEFAULT_COUNT) => {
         document.getElementById('area').innerHTML = '';
         this.#counter.reset();
+        this.#palette.reset();
         this.createBottles(count)
     }
 
