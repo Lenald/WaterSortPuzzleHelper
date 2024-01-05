@@ -65,7 +65,7 @@ export default class Counter {
                 this.#disableColor(color);
             }
         } else {
-            throw new Error('You hav reached the limit (' + this.#limit + ') for this color already');
+            throw new Error('You have reached the limit (' + this.#limit + ') for this color already');
         }
     }
 
