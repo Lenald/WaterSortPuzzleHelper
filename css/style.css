@@ -23,6 +23,7 @@
 
 body {
     background: #1d1d1f;
+    user-select: none;
 }
 
 #wrap {
